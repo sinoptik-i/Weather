@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="label_temp">Температура:</string>
+    <string name="label_temp_feels_like">Чувствуется как:</string>
+    <string name="label_description">Описание:</string>
+    <string name="label_time">Данные на:</string>
+</resources>

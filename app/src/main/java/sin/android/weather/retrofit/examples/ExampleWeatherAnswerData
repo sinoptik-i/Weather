@@ -1,0 +1,93 @@
+//http://api.openweathermap.org/data/2.5/weather?q=Lipetsk,ru&APPID=b1bde1ba8e7d072a163ca6aff1db67cb
+
+{
+  "coord": {
+    "lon": 39.5708,
+    "lat": 52.6031
+  },
+  "weather": [
+    {
+      "id": 804,
+      "main": "Clouds",
+      "description": "overcast clouds",
+      "icon": "04n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 269.71,
+    "feels_like": 265.59,
+    "temp_min": 269.71,
+    "temp_max": 269.71,
+    "pressure": 1042,
+    "humidity": 51,
+    "sea_level": 1042,
+    "grnd_level": 1022
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 2.93,
+    "deg": 89,
+    "gust": 6.45
+  },
+  "clouds": {
+    "all": 100
+  },
+  "dt": 1669902438,
+  "sys": {
+    "country": "RU",
+    "sunrise": 1669871401,
+    "sunset": 1669900301
+  },
+  "timezone": 10800,
+  "id": 535121,
+  "name": "Lipetsk",
+  "cod": 200
+}
+
+//https://api.openweathermap.org/data/2.5/weather?q=Lipetsk,ru&APPID=b1bde1ba8e7d072a163ca6aff1db67cb&units=metric&lang=ru
+
+{
+  "coord": {
+    "lon": 39.5708,
+    "lat": 52.6031
+  },
+  "weather": [
+    {
+      "id": 804,
+      "main": "Clouds",
+      "description": "пасмурно",
+      "icon": "04n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": -3.44,
+    "feels_like": -7.56,
+    "temp_min": -3.44,
+    "temp_max": -3.44,
+    "pressure": 1042,
+    "humidity": 51,
+    "sea_level": 1042,
+    "grnd_level": 1022
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 2.93,
+    "deg": 89,
+    "gust": 6.45
+  },
+  "clouds": {
+    "all": 100
+  },
+  "dt": 1669903473,
+  "sys": {
+    "country": "RU",
+    "sunrise": 1669871401,
+    "sunset": 1669900301
+  },
+  "timezone": 10800,
+  "id": 535121,
+  "name": "Липецк",
+  "cod": 200
+}

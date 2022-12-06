@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/label_temp"
+        style="@style/textViewStyle"
+        android:text="@string/label_temp" />
+
+    <TextView
+        android:id="@+id/view_temp"
+        style="@style/textViewStyle" />
+
+    <TextView
+        android:id="@+id/label_temp_feels_like"
+        style="@style/textViewStyle"
+        android:text="@string/label_temp_feels_like" />
+
+    <TextView
+        android:id="@+id/view_temp_feels_like"
+        style="@style/textViewStyle" />
+
+    <TextView
+        android:id="@+id/label_description"
+        style="@style/textViewStyle"
+        android:text="@string/label_description" />
+
+    <TextView
+        android:id="@+id/view_description"
+        style="@style/textViewStyle" />
+
+
+    <TextView
+        android:id="@+id/label_time"
+        style="@style/textViewStyle"
+        android:text="@string/label_time" />
+
+    <TextView
+        android:id="@+id/view_time"
+        style="@style/textViewStyle" />
+
+</LinearLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <!--    <Button
+            android:id="@+id/button_get_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get Weather"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+
+    <!--
+    </LinearLayout>-->
