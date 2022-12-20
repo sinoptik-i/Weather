@@ -1,9 +1,10 @@
 package sin.android.weather.room
 
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Entity(tableName = "usingWeathers")
-data class SavingWeather(
+data class PreservedWeather(
     @ColumnInfo(name = "tempFeelsLike") val tempFeelsLike: Double,
     @ColumnInfo(name = "temp") val temp: Double,
     @ColumnInfo(name = "description") val description: String,
@@ -12,10 +13,16 @@ data class SavingWeather(
 
 
 @Dao
-interface SavingWeatherDao{
+interface PreservedWeatherDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveOneWeather(savingWeather: SavingWeather)
+    suspend fun saveOneWeather(preservedWeather: PreservedWeather)
 
     @Query("SELECT * FROM usingWeathers")
-    fun getAllWeathers(): List<SavingWeather>
+    fun getAllWeathers(): List<PreservedWeather>
+
+    @Insert(onConflict = REPLACE)
+    suspend fun saveForecast(forecast: List<PreservedWeather>)
+
+    @Query("DELETE FROM usingWeathers")
+    suspend fun deleteForecast()
 }

@@ -18,16 +18,18 @@ abstract class ViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ViewModelWeather::class)
-    abstract fun oneVeaherRequest(vm: ViewModelWeather): ViewModel
+    abstract fun oneWeatherRequest(vm: ViewModelWeather): ViewModel
 
 
     @Module
-    companion object{
+    companion object {
         @Provides
         @JvmStatic
         @Singleton
         fun provideViewModelFactory(
-            viewModels: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
+            viewModels: Map<Class<out ViewModel>,
+                    @JvmSuppressWildcards Provider<ViewModel>
+                    >
         ): ViewModelProvider.Factory = ViewModelFactory(viewModels)
     }
 }

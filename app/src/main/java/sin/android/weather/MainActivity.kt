@@ -7,12 +7,17 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import kotlinx.coroutines.launch
+import sin.android.weather.data.UsingWeather
 import sin.android.weather.databinding.ActivityMainBinding
 import sin.android.weather.di.DaggerWeatherComponent
 import sin.android.weather.di.WeatherComponent
+import sin.android.weather.viewModels.FORECAST_TAG
 import sin.android.weather.viewModels.ViewModelWeather
 import javax.inject.Inject
 
@@ -21,7 +26,10 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        weatherComponent = DaggerWeatherComponent.create()
+        weatherComponent =
+            DaggerWeatherComponent.builder()
+                .application(this)
+                .build()
     }
 }
 
@@ -40,6 +48,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var workManager: WorkManager
+
     private lateinit var binding: ActivityMainBinding
 
     private val viewModelWeather: ViewModelWeather by viewModels(factoryProducer = { factory })
@@ -47,22 +58,54 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        DaggerWeatherComponent.create().inject(this)
-
+        appComponent.inject(this)
         setContentView(binding.root)
         //  binding.buttonGetWeather.setOnClickListener {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            getNowWeather()
+            //viewModelWeather.refreshWeather()
+            viewModelWeather.takeForecast()
+            // getNowWeather()
         }
+        viewModelWeather.nowWeather.observe(this, observeNowWeather())
+        observeForecast()
 
+    }
+
+    private fun observeForecast() {
+        workManager
+            .getWorkInfosByTagLiveData(FORECAST_TAG)
+            .observe(this, {
+                if(!it.isEmpty()) {
+                    val workInfo = it[0]
+                    Log.e(TAG, "${workInfo.state}")
+                }
+/*
+                if(it[0].state==WorkInfo.State.SUCCEEDED)
+                {}
+*/
+            })
     }
 
 
     override fun onResume() {
         super.onResume()
-        getNowWeather()
+        viewModelWeather.refreshWeather()
+        // getNowWeather()
     }
+
+    private fun observeNowWeather(): Observer<UsingWeather> {
+        return Observer {
+            with(binding) {
+                viewTemp.text = it.temp.toString()
+                viewTempFeelsLike.text = it.tempFeelsLike.toString()
+                viewDescription.text = it.description
+                viewTime.text = it.time
+                swipeRefreshLayout.isRefreshing = false
+            }
+        }
+    }
+
 
     fun getNowWeather() {
         lifecycle.coroutineScope.launch {
@@ -85,10 +128,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showWorkInProgress() {
-        with(binding) {
-            progressBar.visibility = View.VISIBLE
-        }
-    }
 
 }

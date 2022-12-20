@@ -7,7 +7,7 @@ import sin.android.weather.retrofit.WeatherRequests
 
 
 @Module
-object ModuleForRetrofitRepository {
+object RetrofitRepositoryModule {
 
     @Provides
     fun retrofitUsing(): WeatherRequests = RetrofitUsing.weatherRequests

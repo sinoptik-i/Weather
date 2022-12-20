@@ -1,4 +1,4 @@
-package sin.android.weather.retrofit.data
+package sin.android.weather.retrofit.examples
 
 data class AnswerForecastData(
     val city: City,
@@ -24,13 +24,14 @@ data class Day(
     val dt: Int,
     val dt_txt: String,
     val main: Main,
-    val pop: Int,
+    val pop: Double,
+    val rain: Rain,
+    val snow: Snow,
     val sys: Sys,
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
 )
-/*
 
 data class Coord(
     val lat: Double,
@@ -53,6 +54,14 @@ data class Main(
     val temp_min: Double
 )
 
+data class Rain(
+    val `3h`: Double
+)
+
+data class Snow(
+    val `3h`: Double
+)
+
 data class Sys(
     val pod: String
 )
@@ -68,4 +77,4 @@ data class Wind(
     val deg: Int,
     val gust: Double,
     val speed: Double
-)*/
+)
