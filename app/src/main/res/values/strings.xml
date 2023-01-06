@@ -4,4 +4,5 @@
     <string name="label_temp_feels_like">Чувствуется как:</string>
     <string name="label_description">Описание:</string>
     <string name="label_time">Данные на:</string>
+    <string name="label_forecast">Прогноз:</string>
 </resources>

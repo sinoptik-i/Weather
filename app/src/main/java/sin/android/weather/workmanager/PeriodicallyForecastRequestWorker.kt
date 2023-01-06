@@ -50,8 +50,10 @@ class PeriodicallyForecastRequestWorker
                             Log.e(TAG, it.toString())
                         }
                 }
-                roomRepository.deleteForecast()
-                roomRepository.saveForecast(savingForecast)
+                if(savingForecast.isNotEmpty()) {
+                    roomRepository.deleteForecast()
+                    roomRepository.saveForecast(savingForecast)
+                }
             }
             Result.success()
         } catch (e: Exception) {

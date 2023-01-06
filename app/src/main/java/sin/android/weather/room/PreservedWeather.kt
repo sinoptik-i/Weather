@@ -2,6 +2,7 @@ package sin.android.weather.room
 
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
+import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "usingWeathers")
 data class PreservedWeather(
@@ -13,12 +14,15 @@ data class PreservedWeather(
 
 
 @Dao
-interface PreservedWeatherDao{
+interface PreservedWeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveOneWeather(preservedWeather: PreservedWeather)
 
     @Query("SELECT * FROM usingWeathers")
-    fun getAllWeathers(): List<PreservedWeather>
+    suspend fun getAllWeathers(): List<PreservedWeather>
+
+    @Query("SELECT * FROM usingWeathers")
+    fun trackAllWeathers(): Flow<List<PreservedWeather>>
 
     @Insert(onConflict = REPLACE)
     suspend fun saveForecast(forecast: List<PreservedWeather>)

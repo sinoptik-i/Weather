@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.launch
@@ -55,38 +57,49 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModelWeather: ViewModelWeather by viewModels(factoryProducer = { factory })
 
+    lateinit var recyclerView: RecyclerView
+
+    val forecastRecyclerAdapter = ForecastRecyclerAdapter(emptyList())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         appComponent.inject(this)
         setContentView(binding.root)
-        //  binding.buttonGetWeather.setOnClickListener {
+
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = forecastRecyclerAdapter
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            //viewModelWeather.refreshWeather()
-            viewModelWeather.takeForecast()
-            // getNowWeather()
+            viewModelWeather.refreshWeather()
+
+            binding.swipeRefreshLayout.isRefreshing = false
+
         }
         viewModelWeather.nowWeather.observe(this, observeNowWeather())
-        observeForecast()
-
+        viewModelWeather.forecast.observe(this, observeForecast())
+        viewModelWeather.refreshSavedForecast()
+        observeWorkerResult()
+        viewModelWeather.startPeriodicWork()
     }
 
-    private fun observeForecast() {
+    private fun observeForecast(): Observer<List<UsingWeather>> {
+        return Observer { forecastRecyclerAdapter.setForecast(it) }
+    }
+
+    private fun observeWorkerResult() {
         workManager
             .getWorkInfosByTagLiveData(FORECAST_TAG)
             .observe(this, {
-                if(!it.isEmpty()) {
+                if (!it.isEmpty()) {
                     val workInfo = it[0]
                     Log.e(TAG, "${workInfo.state}")
+                    viewModelWeather.refreshSavedForecast()
                 }
-/*
-                if(it[0].state==WorkInfo.State.SUCCEEDED)
-                {}
-*/
             })
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -126,7 +139,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
 
 }

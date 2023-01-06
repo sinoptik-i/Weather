@@ -1,81 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_200"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:orientation="vertical">
 
-     <!--   <ProgressBar
-            android:id="@+id/progress_bar"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />-->
+            android:layout_margin="8dp"
+            app:cardCornerRadius="20dp">
 
-        <TextView
-            android:id="@+id/label_temp"
-            style="@style/textViewStyle"
-            android:text="@string/label_temp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color1"
 
-        <TextView
-            android:id="@+id/view_temp"
-            style="@style/textViewStyle" />
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/label_temp_feels_like"
-            style="@style/textViewStyle"
-            android:text="@string/label_temp_feels_like" />
+                <TextView
+                    android:id="@+id/label_temp"
+                    style="@style/textViewStyle"
+                    android:text="@string/label_temp" />
 
-        <TextView
-            android:id="@+id/view_temp_feels_like"
-            style="@style/textViewStyle" />
+                <TextView
+                    android:id="@+id/view_temp"
+                    style="@style/textViewStyle" />
 
-        <TextView
-            android:id="@+id/label_description"
-            style="@style/textViewStyle"
-            android:text="@string/label_description" />
+                <TextView
+                    android:id="@+id/label_temp_feels_like"
+                    style="@style/textViewStyle"
+                    android:text="@string/label_temp_feels_like" />
 
-        <TextView
-            android:id="@+id/view_description"
-            style="@style/textViewStyle" />
+                <TextView
+                    android:id="@+id/view_temp_feels_like"
+                    style="@style/textViewStyle" />
 
+                <TextView
+                    android:id="@+id/label_description"
+                    style="@style/textViewStyle"
+                    android:text="@string/label_description" />
 
-        <TextView
-            android:id="@+id/label_time"
-            style="@style/textViewStyle"
-            android:text="@string/label_time" />
+                <TextView
+                    android:id="@+id/view_description"
+                    style="@style/textViewStyle" />
 
-        <TextView
-            android:id="@+id/view_time"
-            style="@style/textViewStyle" />
+                <TextView
+                    android:id="@+id/label_time"
+                    style="@style/textViewStyle"
+                    android:text="@string/label_time" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/view_time"
+                    style="@style/textViewStyle" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
 
+            <TextView
+                style="@style/textViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_forecast" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:listitem="@layout/weather_item_view" />
+
+        </LinearLayout>
     </LinearLayout>
 
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout><!--    <Button
-            android:id="@+id/button_get_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="get Weather"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
-
-    <!--
-    </LinearLayout>-->
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

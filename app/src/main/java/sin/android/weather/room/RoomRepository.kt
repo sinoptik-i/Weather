@@ -2,13 +2,24 @@ package sin.android.weather.room
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import sin.android.weather.addTimeString
+import sin.android.weather.data.UsingWeather
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(
     private val preservedWeatherDao: PreservedWeatherDao,
     private val scope: CoroutineScope
 ) {
-    fun getAllPeriodicallyWeather() = preservedWeatherDao.getAllWeathers()
+   suspend fun getAllWeather() = preservedWeatherDao
+        .getAllWeathers().map {
+            UsingWeather(
+                it.tempFeelsLike,
+                it.temp,
+                it.description,
+                addTimeString(it.date.toLong())
+//                        addTimeString(it.date)
+            )
+    }
 
     fun saveWeather(preservedWeather: PreservedWeather) {
         scope.launch {
@@ -21,7 +32,7 @@ class RoomRepository @Inject constructor(
 
     suspend fun deleteForecast()=preservedWeatherDao.deleteForecast()
 
-
+    fun trackaAllWeathers() = preservedWeatherDao.trackAllWeathers()
 
 
 }

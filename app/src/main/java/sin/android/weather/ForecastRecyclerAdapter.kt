@@ -8,9 +8,14 @@ import sin.android.weather.databinding.WeatherItemViewBinding
 
 
 class ForecastRecyclerAdapter(
-    private val forecastWeatherList: List<UsingWeather>
+    private var forecastWeatherList: List<UsingWeather>
 ) : RecyclerView.Adapter<ForecastRecyclerAdapter.ForecastViewHolder>() {
 
+
+    fun setForecast(forecastWeatherList: List<UsingWeather>) {
+        this.forecastWeatherList = forecastWeatherList
+        notifyDataSetChanged()
+    }
 
     class ForecastViewHolder(val binding: WeatherItemViewBinding) :
         RecyclerView.ViewHolder(binding.root)

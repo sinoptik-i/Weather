@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import sin.android.weather.addTimeString
 import sin.android.weather.data.RetrofitRepository
 import sin.android.weather.data.UsingWeather
+import sin.android.weather.getNowTime
 import sin.android.weather.retrofit.data.AnswerWeatherData
+import sin.android.weather.room.RoomRepository
 import sin.android.weather.workmanager.GetWeatherWorkerV2
 import sin.android.weather.workmanager.PeriodicallyForecastRequestWorker
 import java.text.SimpleDateFormat
@@ -19,10 +22,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 val FORECAST_TAG = "FORECAST_TAG"
+val UNIQUE_FORECAST_WORK_NAME = "UNIQUE_FORECAST_WORK_NAME"
 
 class ViewModelWeather @Inject constructor(
     private val retrofitRepository: RetrofitRepository,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val roomRepository: RoomRepository
 ) : ViewModel() {
 
 
@@ -31,8 +36,14 @@ class ViewModelWeather @Inject constructor(
     private val _nowWeather = MutableLiveData<UsingWeather>()
     val nowWeather: LiveData<UsingWeather> = _nowWeather
 
-/*    private val _date = MutableLiveData<String>()
-    val date: LiveData<String> = _date*/
+    private val _forecast = MutableLiveData<List<UsingWeather>>()
+
+    val forecast: LiveData<List<UsingWeather>> = _forecast
+//        val forecast: LiveData<List<UsingWeather>> = roomRepository.trackaAllWeathers().asLiveData()
+/*    val forecast: LiveData<List<UsingWeather>> = LiveData {
+        val data = getUsingWeather()
+        emit(data)
+    }*/
 
 
     fun refreshWeather() {
@@ -41,8 +52,15 @@ class ViewModelWeather @Inject constructor(
         }
     }
 
+    fun refreshSavedForecast() {
+        viewModelScope.launch {
+            _forecast.value = roomRepository.getAllWeather()
+        }
+    }
+
     suspend fun getUsingWeather() = retrofitRepository.getNowWeather().let {
-        val timeStr = "${addTimeString(it.dt)}, (${getNowTime()})"
+//        val timeStr = "${addTimeString(it.dt)}, (${getNowTime()})"
+        val timeStr = "${addTimeString(it.dt.toLong())}, (${getNowTime()})"
         //  Log.e(TAG, timeStr)
         UsingWeather(
             it.main.feels_like,
@@ -54,8 +72,8 @@ class ViewModelWeather @Inject constructor(
         }
     }
 
-    fun takeForecast() {
 
+    fun takeForecast() {
         val workRequest = OneTimeWorkRequestBuilder<PeriodicallyForecastRequestWorker>()
             .addTag(FORECAST_TAG)
             .build()
@@ -74,25 +92,12 @@ class ViewModelWeather @Inject constructor(
             2,
             TimeUnit.HOURS
         )
-            .addTag(FORECAST_TAG)
+//            .addTag(FORECAST_TAG)
             .setConstraints(constraints)
             .build()
 
         workManager
-            .enqueue(workRequest)
-
+            .enqueueUniquePeriodicWork(UNIQUE_FORECAST_WORK_NAME,ExistingPeriodicWorkPolicy.KEEP,workRequest)
 
     }
-
-
-    fun getNowTime(): String {
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy kk:mm")
-        return dateFormat.format(Calendar.getInstance().timeInMillis)
-    }
-
-    fun addTimeString(time: Int): String {
-        val dateFormat = SimpleDateFormat("kk:mm:ss")
-        return "${dateFormat.format(time)}"
-    }
-
 }
